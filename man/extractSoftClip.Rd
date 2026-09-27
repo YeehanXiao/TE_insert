@@ -2,21 +2,36 @@
 % Please edit documentation in R/process.R
 \name{extractSoftClip}
 \alias{extractSoftClip}
-\title{Extract soft clip reads}
+\title{Extract soft-clipped sequences}
 \usage{
-extractSoftClip(file, outfq, mapq = 20, length = 30, tsd = 10)
+extractSoftClip(
+  file,
+  outfq,
+  mapq = 20L,
+  length = 30L,
+  tsd = 10L,
+  overwrite = FALSE
+)
 }
 \arguments{
-\item{file}{Character, the alignment file. Supported formats include BAM and SAM.}
+\item{file}{Host-genome SAM or BAM file.}
 
-\item{outfq}{Character, the output FASTQ file.}
+\item{outfq}{Output FASTQ file.}
 
-\item{mapq}{The MAPping quality, 10 by default.}
+\item{mapq}{Minimum mapping quality.}
 
-\item{length}{The minimum soft clip reads length, 30 by default.}
+\item{length}{Minimum soft-clipped sequence length.}
 
-\item{tsd}{The max length of tsd.}
+\item{tsd}{Maximum target-site-duplication sequence length retained in the
+record name.}
+
+\item{overwrite}{Replace an existing output file.}
+}
+\value{
+The normalized output FASTQ path, invisibly.
 }
 \description{
-Extract soft clip reads from alignment.
+Extracts terminal soft-clipped sequences from a host-genome SAM or BAM file
+and writes them as FASTQ records. Breakpoint metadata are encoded in each
+record name for the downstream short-read workflow.
 }

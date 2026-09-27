@@ -2,21 +2,22 @@
 % Please edit documentation in R/process.R
 \name{buildIndex}
 \alias{buildIndex}
-\title{Build a Bowtie index from transposon sequences}
+\title{Build a Bowtie2 transposable element index}
 \usage{
 buildIndex(reference, index, overwrite = FALSE, ...)
 }
 \arguments{
-\item{reference}{Character, the path to the fasta reference containing the
-transposon sequences.}
+\item{reference}{FASTA file containing transposable element sequences.}
 
-\item{index}{Character, the prefix of index.}
+\item{index}{Output index prefix.}
 
-\item{overwrite}{Boolean, whether to overwrite existing files. Default is true.
-default is 'TRUE'}
+\item{overwrite}{Replace existing index files.}
 
-\item{...}{Other arguments}
+\item{...}{Additional arguments passed to \code{Rbowtie2::bowtie2_build()}.}
+}
+\value{
+The value returned by \code{Rbowtie2::bowtie2_build()}.
 }
 \description{
-Build a Bowtie index from transposon sequences
+Build a Bowtie2 transposable element index
 }

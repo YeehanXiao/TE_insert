@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 processbam <- function(bamfile, outfq, quantile, length, tsd) {
-    invisible(.Call('_TEi_processbam', PACKAGE = 'TEi', bamfile, outfq, quantile, length, tsd))
+    invisible(.Call(`_TEi_processbam`, bamfile, outfq, quantile, length, tsd))
 }
 
 processSam2bed <- function(alignmentfile, outbedfile, ratio) {
-    invisible(.Call('_TEi_processSam2bed', PACKAGE = 'TEi', alignmentfile, outbedfile, ratio))
+    invisible(.Call(`_TEi_processSam2bed`, alignmentfile, outbedfile, ratio))
 }
 

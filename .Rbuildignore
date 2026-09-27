@@ -1,2 +1,6 @@
+^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^tools$
+^src/Makevars$
+^src/Makevars\.win$

@@ -1,4 +1,14 @@
-.Rproj.user
+.DS_Store
 .Rhistory
 .RData
-.Ruserdata
+.Rproj.user/
+*.Rcheck/
+*.tar.gz
+src/*.o
+src/*.so
+src/*.dll
+src/*.dylib
+src/symbols.rds
+src/Makevars
+src/Makevars.win
+tests/testthat/_snaps/

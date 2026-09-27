@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+TEI_R_HOME=${R_HOME:-$(R RHOME)}
+"${TEI_R_HOME}/bin/Rscript" --vanilla -e 'writeLines(c(paste("PKG_LIBS =", capture.output(Rhtslib::pkgconfig("PKG_LIBS"))), paste("PKG_CPPFLAGS =", capture.output(Rhtslib::pkgconfig("PKG_CPPFLAGS")))), "src/Makevars.win")'

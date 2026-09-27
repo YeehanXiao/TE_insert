@@ -1,26 +1,51 @@
 Package: TEi
 Type: Package
-Title: Transposable elements detection
-Version: 1.0.1
-Date: 2022-06-01
+Title: Transposable Element Insertion Detection from Sequencing Data
+Version: 1.1.0.9000
 Authors@R: c(
-  person(given = "Tao", family = "Chen", role = c("aut", "cre"), email = "taochenhm@gmail.com"), 
-  person(given = "Yihan", family = "Xiao", role = c("aut"), email = "1653008@tongji.edu.cn"))
-Description: This package is use to transposable element detection from sequence data.
-License: GPL (>= 2)
-Depends:
-    R (>= 4.1.0)
-Imports: 
-    Rcpp (>= 1.0.8), 
-    Rhtslib, 
-    zlibbioc, 
-    BSgenome, 
-    Rsamtools,
-    Rbowtie2,
-    rtracklayer,
-    Biostrings,
-    S4Vectors,
-    GenomicRanges
-LinkingTo: Rcpp, Rhtslib, zlibbioc
+    person(
+        given = "Tao",
+        family = "Chen",
+        email = "taochenhm@gmail.com",
+        role = "aut"
+    ),
+    person(
+        given = "Yihan",
+        family = "Xiao",
+        email = "1653008@tongji.edu.cn",
+        role = c("aut", "cre")
+    )
+  )
+Description: Detects candidate non-reference transposable element insertions
+    from genome-aligned sequencing reads. The short-read workflow extracts
+    informative soft-clipped sequences, assigns them to transposable element
+    references, and summarizes supported breakpoints. An experimental
+    long-read workflow extracts insertion, split-alignment, and terminal-clip
+    evidence from Oxford Nanopore and PacBio alignments for classification
+    against a user-supplied transposable element reference.
+License: MIT + file LICENSE
+URL: https://github.com/YeehanXiao/TE_insert,
+    https://github.com/tchen-tt/TEi
+BugReports: https://github.com/YeehanXiao/TE_insert/issues
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+Depends:
+    R (>= 4.2.0)
+Imports:
+    Biostrings,
+    GenomicRanges,
+    IRanges,
+    Rcpp (>= 1.0.8),
+    Rsamtools,
+    S4Vectors,
+    stats,
+    utils
+Suggests:
+    Rbowtie2,
+    testthat (>= 3.0.0)
+LinkingTo:
+    Rcpp,
+    Rhtslib
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+NeedsCompilation: yes
+Config/roxygen2/version: 8.1.0

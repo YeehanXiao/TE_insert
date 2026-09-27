@@ -1,30 +1,148 @@
 # TEi
-[![License: GPL
-v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![Last Commit](https://badgen.net/github/last-commit/tchen-tt/TEi/main)  
 
-TEi (Transposable element insertion identification) is design to identify TE insertion from paired-end illumina reads, takes whole-exome sequencing (WES), whole-genome sequencing (WGS) and Histone Modification (H3K27ac et al.) data
+[![R-CMD-check](https://github.com/YeehanXiao/TE_insert/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/YeehanXiao/TE_insert/actions/workflows/R-CMD-check.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
-![](./picture/insertions.png)
+TEi detects candidate non-reference transposable element insertions from
+genome-aligned sequencing reads. The maintained package contains two explicit
+workflows:
 
-# Installation
-TEi has been successfully installed on Mac OSX, Linux, and Windows, using the devtools package to install directly from GitHub
+- a short-read workflow based on terminal soft clips and TE-reference
+  realignment;
+- an experimental long-read workflow for Oxford Nanopore and PacBio BAM files.
+
+The long-read workflow reports evidence and ambiguity; it does not claim
+genotyping, local assembly, mosaic calibration, or complete insertion
+reconstruction.
+
+## Installation
+
+Install the required Bioconductor packages and then TEi:
 
 ```r
-devtools::install_github("tchen-tt/TEi")
+install.packages("BiocManager")
+BiocManager::install(c(
+  "Biostrings", "GenomicRanges", "IRanges", "Rhtslib",
+  "Rsamtools", "S4Vectors"
+))
+install.packages("remotes")
+remotes::install_github("YeehanXiao/TE_insert")
 ```
-# Contribution
-Improvements and new features will be added on a regular basis, please post on the github page with any question or if you would like to contribute.
 
-# Contact
-Please contact us:  
-Tao Chen: <taochenhm@gmail.com>
+The short-read TE-alignment step additionally uses `Rbowtie2`:
 
+```r
+BiocManager::install("Rbowtie2")
+```
 
-# Reference
-\[1\] Tang Z, Steranka J P, Ma S, et al. Human transposon insertion profiling: Analysis, visualization and identification of somatic LINE-1 insertions in ovarian cancer[J]. Proceedings of the National Academy of Sciences, 2017, 114(5): E733-E740.  
-\[2\] Chu C, Borges-Monroy R, Viswanadham V V, et al. Comprehensive identification of transposable element insertions using multiple sequencing technologies[J]. Nature communications, 2021, 12(1): 3836.  
-\[3\] Vendrell-Mir P, Barteri F, Merenciano M, et al. A benchmark of transposon insertion detection tools using real data[J]. Mobile DNA, 2019, 10: 1-19.  
-\[4\] Riehl K, Riccio C, Miska E A, et al. TransposonUltimate: software for transposon classification, annotation and detection[J]. Nucleic Acids Research, 2022, 50(11): e64-e64.  
-\[5\] Stuart T, Eichten S R, Cahn J, et al. Population scale mapping of transposable element diversity reveals links to gene regulation and epigenomic variation[J]. elife, 2016, 5: e20777.  
+Long-read TE classification requires
+[minimap2](https://github.com/lh3/minimap2) on `PATH`.
 
+## Short-read workflow
+
+```r
+library(TEi)
+
+buildIndex("te_consensus.fa", "te_index")
+
+extractSoftClip(
+  file = "host.qname_sorted.bam",
+  outfq = "soft_clips.fastq",
+  mapq = 20,
+  length = 30,
+  tsd = 10
+)
+
+te_bam <- alignment(
+  reference = "te_index",
+  fastq = "soft_clips.fastq",
+  bamOutput = "soft_clips_to_te.bam",
+  threads = 8
+)
+
+insertLocation(te_bam, "te_breakpoints.bed", ratio = 0.5)
+calls <- processInsertion("te_breakpoints.bed", max.gapwidth = 10)
+```
+
+The TE-aligned BAM must be query-name sorted. `alignment()` performs that step
+automatically.
+
+## Experimental long-read workflow
+
+Input must be genomic DNA reads aligned to a host reference in BAM format.
+Recommended host-alignment presets are `map-ont` for standard ONT reads,
+`lr:hq` for accurate ONT reads, `map-hifi` for PacBio HiFi, and `map-pb` for
+legacy PacBio CLR data. Preserve soft clipping and SA tags in the host BAM.
+
+```r
+evidence <- extractLongReadEvidence(
+  alignment = "long_reads.host.bam",
+  minMapQ = 20,
+  minLength = 100
+)
+
+classification <- classifyLongReadEvidence(
+  evidence = evidence,
+  teReference = "te_consensus.fa",
+  teMetadata = "te_metadata.tsv",
+  platform = "ont",
+  threads = 8
+)
+
+calls <- summarizeLongReadInsertions(
+  evidence,
+  classification,
+  clusterWindow = 50,
+  minSupport = 2
+)
+```
+
+The convenience wrapper runs all three stages:
+
+```r
+result <- detectLongReadInsertions(
+  alignment = "long_reads.host.bam",
+  teReference = "te_consensus.fa",
+  platform = "hifi",
+  threads = 8
+)
+```
+
+Long-read evidence currently includes large CIGAR insertions, terminal soft
+clips, and colinear same-strand gaps reconstructed from SA tags. Candidate
+segments are mapped to a user-supplied TE FASTA with minimap2. Near-tied hits
+remain `ambiguous` rather than being forced into one TE family.
+
+TE reference sequences are not bundled. Users are responsible for selecting a
+licensed and biologically appropriate reference library.
+
+## Output and validation status
+
+Short-read calls are returned as `GRanges`. Long-read functions return explicit
+evidence, classification, and call tables with zero-based interbase breakpoint
+columns marked by the `_0` suffix.
+
+The package includes synthetic regression tests for native soft-clip handling,
+TE multimapping, long-read CIGAR insertions, SA gaps, filtering, ambiguity, and
+support aggregation. Real ONT/HiFi sensitivity and precision still require
+dataset-specific benchmarking before biological claims are made.
+
+## Attribution
+
+TEi was originally developed by Tao Chen and Yihan Xiao. This repository
+retains the complete history from the original
+[`tchen-tt/TEi`](https://github.com/tchen-tt/TEi) project and the original MIT
+license notice. The current maintenance work focuses on reproducible packaging,
+testing, and explicit short-read and long-read interfaces.
+
+## References
+
+- Li H. Minimap2: pairwise alignment for nucleotide sequences. *Bioinformatics*
+  (2018).
+- Tang Z et al. Human transposon insertion profiling. *PNAS* (2017).
+- Chu C et al. Comprehensive identification of transposable element insertions
+  using multiple sequencing technologies. *Nature Communications* (2021).
+
+## License
+
+MIT. See [LICENSE.md](LICENSE.md).
