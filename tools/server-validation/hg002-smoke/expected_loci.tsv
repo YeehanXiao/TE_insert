@@ -1,0 +1,3 @@
+seqname	vcf_pos_1based	expected_breakpoint_0	svtype	svlen_bp	genotype	repeat_name	repeat_class_family	benchmark_bed_start_0	benchmark_bed_end_0	inserted_sequence_sha256	truth_version
+chr1	74727205	74727205	INS	3710	0|1	L1HS	LINE/L1	74378646	75760494	21ddbc986c404f89d80cd24d4f3401a7ff095d563cfeaf4f350230e00e834993	GIAB_v5.0q
+chr1	75091476	75091476	INS	314	1|1	ALUYA5	SINE/Alu	74378646	75760494	287302bcbd03af65ca462b0cc97c696d69fead6f544d34c8ebc6706343dd7d21	GIAB_v5.0q

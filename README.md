@@ -127,6 +127,13 @@ TE multimapping, long-read CIGAR insertions, SA gaps, filtering, ambiguity, and
 support aggregation. Real ONT/HiFi sensitivity and precision still require
 dataset-specific benchmarking before biological claims are made.
 
+A reproducible positive-control smoke test is provided in
+[`tools/server-validation/hg002-smoke`](tools/server-validation/hg002-smoke).
+It extracts a 520 kb window from the official GIAB HG002 ONT ultra-long
+genomic-DNA alignment and checks two sequence-resolved truth insertions: L1HS
+and AluYa5. This is an execution and locus-recovery test, not a sensitivity or
+specificity benchmark.
+
 ## Attribution
 
 TEi was originally developed by Tao Chen and Yihan Xiao. This repository
