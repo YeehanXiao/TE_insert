@@ -43,6 +43,32 @@ With TE metadata:
 
 Use a new output directory for every run. The default thread count is 4 when the final argument is omitted.
 
+## HG002 ONT positive-control smoke test
+
+The bundled `hg002-smoke` kit extracts only `chr1:74650000-75170000` from the
+official GIAB HG002 ONT ultra-long genomic-DNA BAM. The 520 kb interval contains
+sequence-resolved L1HS and AluYa5 truth insertions. It avoids downloading the
+complete 174.64 GiB source BAM.
+
+On the Linux server, run:
+
+```bash
+cd hg002-smoke
+chmod +x prepare_hg002_smoke_test.sh ../run_validation.sh
+./prepare_hg002_smoke_test.sh ./data 8
+../run_validation.sh \
+  ../TEi_1.1.0.9000.tar.gz \
+  ./data/HG002_GRCh38_ONT_UL_UCSC_20200508.chr1_74650000_75170000.bam \
+  ./truth_te_insertions.fa \
+  ont \
+  ./validation-output \
+  ./truth_te_metadata.tsv \
+  8
+```
+
+See [`hg002-smoke/README.md`](hg002-smoke/README.md) for the expected loci,
+source records, call-review command, and interpretation limits.
+
 ## Fixed validation settings
 
 The validation uses host mapping quality 20, minimum candidate length 100 bp, maximum host reference gap 50 bp, minimum TE-aligned length 80 bp, minimum TE query fraction 0.5, minimum TE identity 0.7, clustering window 50 bp, and minimum support of two unique reads. Ambiguous TE assignments are retained in the classification output but excluded from insertion calls.
