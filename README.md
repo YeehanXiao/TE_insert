@@ -134,13 +134,17 @@ genomic-DNA alignment and checks two sequence-resolved truth insertions: L1HS
 and AluYa5. This is an execution and locus-recovery test, not a sensitivity or
 specificity benchmark.
 
-## Attribution
+## Contributors and attribution
 
-TEi was originally developed by Tao Chen and Yihan Xiao. This repository
-retains the complete history from the original
-[`tchen-tt/TEi`](https://github.com/tchen-tt/TEi) project and the original MIT
-license notice. The current maintenance work focuses on reproducible packaging,
-testing, and explicit short-read and long-read interfaces.
+- [Tao Chen (`@tchen-tt`)](https://github.com/tchen-tt): original co-developer
+  and package author.
+- [Yihan Xiao (`@YeehanXiao`)](https://github.com/YeehanXiao): original
+  co-developer and current maintainer.
+
+This repository retains the complete commit history from the original
+[`tchen-tt/TEi`](https://github.com/tchen-tt/TEi) project and its MIT license
+notice. Current maintenance focuses on reproducible packaging, tests, and
+explicit short-read and experimental long-read interfaces.
 
 ## References
 
