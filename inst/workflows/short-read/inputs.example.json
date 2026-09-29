@@ -1,0 +1,10 @@
+{
+  "TEiShortRead.host_bam": "/path/to/host-aligned.bam",
+  "TEiShortRead.te_reference_fasta": "/path/to/te-consensus.fa",
+  "TEiShortRead.output_prefix": "sample",
+  "TEiShortRead.threads": 8,
+  "TEiShortRead.min_mapq": 20,
+  "TEiShortRead.min_clip_length": 30,
+  "TEiShortRead.tsd_length": 10,
+  "TEiShortRead.assignment_ratio": 0.1
+}

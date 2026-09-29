@@ -67,6 +67,24 @@ calls <- processInsertion("te_breakpoints.bed", max.gapwidth = 10)
 The TE-aligned BAM must be query-name sorted. `alignment()` performs that step
 automatically.
 
+A complete WDL 1.0 implementation of the same three-stage workflow is installed
+with the package:
+
+```r
+system.file(
+  "workflows", "short-read", "TEi-short-read.wdl",
+  package = "TEi", mustWork = TRUE
+)
+system.file(
+  "workflows", "short-read", "inputs.example.json",
+  package = "TEi", mustWork = TRUE
+)
+```
+
+Copy the example inputs file, replace its two input paths, and run it with
+Cromwell or another WDL 1.0 runner. The workflow directly calls the package
+functions and does not require separate wrapper scripts.
+
 ## Experimental long-read workflow
 
 Input must be genomic DNA reads aligned to a host reference in BAM format.
@@ -113,6 +131,11 @@ clips, and colinear same-strand gaps reconstructed from SA tags. Candidate
 segments are mapped to a user-supplied TE FASTA with minimap2. Near-tied hits
 remain `ambiguous` rather than being forced into one TE family.
 
+The experimental long-read workflow extends TEi's original short-read
+evidence--classification--aggregation design to ONT and PacBio alignments. Its
+implementation was newly written for this repository using Rsamtools and
+minimap2; it does not reuse source code from third-party TE-insertion callers.
+
 TE reference sequences are not bundled. Users are responsible for selecting a
 licensed and biologically appropriate reference library.
 
@@ -136,10 +159,14 @@ specificity benchmark.
 
 ## Contributors and attribution
 
-- [Tao Chen (`@tchen-tt`)](https://github.com/tchen-tt): original co-developer
-  and package author.
-- [Yihan Xiao (`@YeehanXiao`)](https://github.com/YeehanXiao): original
-  co-developer and current maintainer.
+TEi was originally co-developed and co-authored by
+[Yihan Xiao (`@YeehanXiao`)](https://github.com/YeehanXiao) and
+[Tao Chen (`@tchen-tt`)](https://github.com/tchen-tt).
+
+- **Yihan Xiao:** original co-developer and package co-author; current
+  maintainer and developer of the package modernization, short-read WDL
+  workflow, test infrastructure, and experimental long-read extension.
+- **Tao Chen:** original co-developer and package co-author.
 
 This repository retains the complete commit history from the original
 [`tchen-tt/TEi`](https://github.com/tchen-tt/TEi) project and its MIT license

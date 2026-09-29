@@ -11,6 +11,8 @@
   the historical record-name format.
 - Added deterministic short-read regression tests and macOS/Linux package
   checks.
+- Restored and repaired the short-read WDL workflow as an installed package
+  asset with complete task wiring and portable file outputs.
 - Added an experimental PacBio/ONT workflow for CIGAR insertion, terminal
   soft-clip, and same-strand split-alignment evidence.
 - Added minimap2-based long-read TE classification with explicit ambiguity and
